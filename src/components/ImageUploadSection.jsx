@@ -1,5 +1,4 @@
 
-
 // import React, { useRef, useState } from "react";
 // import axiosInstance from "../services/axiosInstance";
 
@@ -9,8 +8,9 @@
 //   const canvasRef = useRef(null);
 
 //   const [cameraKey, setCameraKey] = useState(null);
-
 //   const [showForm, setShowForm] = useState(true);
+
+//   const [location, setLocation] = useState(null);
 
 //   const [vehicleData, setVehicleData] = useState({
 //     regnNo: "",
@@ -37,12 +37,14 @@
 //   ];
 
 //   const handleChange = (e) => {
+
 //     const { name, value } = e.target;
 
 //     setVehicleData((prev) => ({
 //       ...prev,
 //       [name]: value
 //     }));
+
 //   };
 
 //   const handleGetDetails = async (e) => {
@@ -56,11 +58,14 @@
 //       engineNo: res.data.engineNo,
 //       chassisNo: res.data.chassisNo
 //     }));
+
 //   };
 
 //   const handleConfirmVehicle = (e) => {
+
 //     e.preventDefault();
 //     setShowForm(false);
+
 //   };
 
 //   /* OPEN CAMERA */
@@ -69,11 +74,26 @@
 
 //     setCameraKey(key);
 
+//     /* GET GEO LOCATION */
+
+//     navigator.geolocation.getCurrentPosition(
+//       (pos) => {
+//         setLocation({
+//           lat: pos.coords.latitude,
+//           lng: pos.coords.longitude
+//         });
+//       },
+//       (err) => {
+//         console.error("Location error", err);
+//       }
+//     );
+
 //     const stream = await navigator.mediaDevices.getUserMedia({
 //       video: { facingMode: "environment" }
 //     });
 
 //     videoRef.current.srcObject = stream;
+
 //   };
 
 //   /* TAKE PHOTO */
@@ -90,6 +110,36 @@
 
 //     ctx.drawImage(video, 0, 0);
 
+//     /* ADD WATERMARK */
+
+//     if (location) {
+
+//       const date = new Date().toLocaleString();
+
+//       const textLines = [
+//         `Vehicle: ${vehicleData.regnNo}`,
+//         `Lat: ${location.lat.toFixed(6)}`,
+//         `Lng: ${location.lng.toFixed(6)}`,
+//         `Time: ${date}`
+//       ];
+
+//       ctx.font = "20px Arial";
+//       ctx.fillStyle = "yellow";
+//       ctx.strokeStyle = "black";
+//       ctx.lineWidth = 3;
+
+//       textLines.forEach((line, index) => {
+
+//         const x = 20;
+//         const y = canvas.height - (80 - index * 25);
+
+//         ctx.strokeText(line, x, y);
+//         ctx.fillText(line, x, y);
+
+//       });
+
+//     }
+
 //     canvas.toBlob((blob) => {
 
 //       const file = new File(
@@ -103,8 +153,6 @@
 //         [cameraKey]: file
 //       }));
 
-//       /* stop camera */
-
 //       const stream = video.srcObject;
 
 //       if (stream) {
@@ -114,6 +162,7 @@
 //       setCameraKey(null);
 
 //     }, "image/jpeg", 0.8);
+
 //   };
 
 //   const allImagesUploaded = inputs.every((item) => images[item.key]);
@@ -156,7 +205,9 @@
 //       console.error(error);
 
 //       alert(error?.response?.data?.message || "Upload failed");
+
 //     }
+
 //   };
 
 //   return (
@@ -187,16 +238,18 @@
 //                   value={vehicleData[d.name]}
 //                   onChange={handleChange}
 //                   readOnly={d.name !== "regnNo"}
-//                   className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
+//                   className="w-full border border-gray-300 w-1/2 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
 //                 />
 
 //                 {d.buttonLabel && (
+
 //                   <button
 //                     onClick={handleGetDetails}
 //                     className="mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
 //                   >
 //                     {d.buttonLabel}
 //                   </button>
+
 //                 )}
 
 //               </div>
@@ -309,10 +362,14 @@
 //       )}
 
 //     </div>
+
 //   );
+
 // };
 
 // export default ImageUploadSection;
+
+
 import React, { useRef, useState } from "react";
 import axiosInstance from "../services/axiosInstance";
 
@@ -351,35 +408,55 @@ const ImageUploadSection = () => {
   ];
 
   const handleChange = (e) => {
-
     const { name, value } = e.target;
 
     setVehicleData((prev) => ({
       ...prev,
       [name]: value
     }));
-
   };
 
-  const handleGetDetails = async (e) => {
+  /* GET VEHICLE DETAILS */
 
+  const handleGetDetails = async (e) => {
     e.preventDefault();
 
-    const res = await axiosInstance.get(`/vehicles/regn/${vehicleData.regnNo}`);
+    if (!vehicleData.regnNo) {
+      alert("Please enter registration number");
+      return;
+    }
 
-    setVehicleData((prev) => ({
-      ...prev,
-      engineNo: res.data.engineNo,
-      chassisNo: res.data.chassisNo
-    }));
+    try {
 
+      const res = await axiosInstance.get(`/vehicles/regn/${vehicleData.regnNo}`);
+
+      if (!res.data) {
+        alert("Vehicle details not found ❌");
+        return;
+      }
+
+      setVehicleData((prev) => ({
+        ...prev,
+        engineNo: res.data.engineNo || "",
+        chassisNo: res.data.chassisNo || ""
+      }));
+
+    } catch (error) {
+
+      alert("Vehicle details not found ❌");
+
+      setVehicleData((prev) => ({
+        ...prev,
+        engineNo: "",
+        chassisNo: ""
+      }));
+
+    }
   };
 
   const handleConfirmVehicle = (e) => {
-
     e.preventDefault();
     setShowForm(false);
-
   };
 
   /* OPEN CAMERA */
@@ -387,8 +464,6 @@ const ImageUploadSection = () => {
   const handleCapture = async (key) => {
 
     setCameraKey(key);
-
-    /* GET GEO LOCATION */
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -424,7 +499,7 @@ const ImageUploadSection = () => {
 
     ctx.drawImage(video, 0, 0);
 
-    /* ADD WATERMARK */
+    /* WATERMARK */
 
     if (location) {
 
@@ -481,6 +556,8 @@ const ImageUploadSection = () => {
 
   const allImagesUploaded = inputs.every((item) => images[item.key]);
 
+  /* SUBMIT */
+
   const handleSubmit = async () => {
 
     const confirmUpload = window.confirm(
@@ -509,7 +586,16 @@ const ImageUploadSection = () => {
         }
       );
 
+      /* RESET FORM */
+
       setImages({});
+
+      setVehicleData({
+        regnNo: "",
+        engineNo: "",
+        chassisNo: ""
+      });
+
       setShowForm(true);
 
       alert("Images uploaded successfully ✅");

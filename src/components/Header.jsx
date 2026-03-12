@@ -33,9 +33,9 @@ const Header = ({ onMenuClick }) => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <div className="relative">
+          <div className="hidden sm:block relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
+              <Search className="h-5 w-5 text-gray-400  " />
             </div>
             <input
               type="text"
@@ -44,7 +44,7 @@ const Header = ({ onMenuClick }) => {
             />
           </div>
 
-          <div className="relative">
+          <div className="hidden sm:block relative">
             <button className="p-2 text-gray-400 hover:text-gray-500 relative">
               <Bell className="h-6 w-6" />
               <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
@@ -53,7 +53,7 @@ const Header = ({ onMenuClick }) => {
             </button>
           </div>
 
-          <div className="text-sm text-gray-500">{currentDate}</div>
+          <div className="hidden sm:block text-sm text-gray-500">{currentDate}</div>
           <div>
             <button
               className="flex items-center gap-2 cursor-pointer px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
