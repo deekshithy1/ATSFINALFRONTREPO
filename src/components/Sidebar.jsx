@@ -12,6 +12,7 @@ import {
   X,
   Home,
   Box,
+  Camera,
 } from "lucide-react";
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -76,6 +77,12 @@ const Sidebar = ({ isOpen, onClose }) => {
       icon: <Box className="w-5 h-5" />,
       roles: ["OFFICER", "SUPER_ADMIN"],
     },
+    {
+      to:"/uploadimages",
+      label:"Upload Image",
+      icon:<Camera className="w-5 h-5"/>,
+      roles:["MVI"]
+    }
   ];
 
   return (

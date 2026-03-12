@@ -1,5 +1,4 @@
 import React from "react";
-
 export const VISUAL_TEST_RULES = [
   { key: "rule189_3i", label: "Registration Plate (Rule 189 (3)(i))" },
   { key: "rule189_7_Visual", label: "Reflectors (Rule 189 (7))" },
@@ -49,16 +48,16 @@ export const VISUAL_TEST_RULES = [
   { key: "rule189_38", label: "Mud Flaps (Rule 189 (38))" },
   { key: "rule189_39", label: "Rear Under-run Protection (Rule 189 (39))" },
 ];
-
-const VisualTestForm = ({ 
-  visualRules, 
-  onRuleChange, 
-  onSubmit, 
-  onCancel, 
+const VisualTestForm = ({
+  visualRules,
+  onRuleChange,
+  onSubmit,
+  onCancel,
   onClearForm,
-  submitting ,
-  handleApproveALL
-}) => {
+  submitting,
+  handleApproveALL,
+  
+})  => {
   const hasRules = Object.keys(visualRules).length > 0;
   
   return (
@@ -95,7 +94,8 @@ const VisualTestForm = ({
           </div>
         ))}
       </div>
-
+      
+    
       <div className="mt-8 flex gap-4">
         <button
           onClick={onSubmit}
@@ -111,6 +111,7 @@ const VisualTestForm = ({
             "Submit Visual Test"
           )}
         </button>
+        
         
         <button
           onClick={onCancel}

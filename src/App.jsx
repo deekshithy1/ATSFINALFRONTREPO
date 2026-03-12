@@ -105,6 +105,7 @@ import FunctionalTestPage from "./pages/FunctionalTestPage";
 import DashboardOff from "./officerPages/DashBoardOff";
 import ATScentres from "./officerPages/ATScenters";
 import UsersOff from "./officerPages/UsersOff";
+import ImageUploadSection from "./components/ImageUploadSection";
 
 const App = () => {
   const { token, user, fetchUser } = useAuthStore();
@@ -160,6 +161,7 @@ const App = () => {
           <Route path="/vehicles" element={<Vehicles />} />
           <Route path="/visualtest" element={<VisualTestPage/>}/>
           <Route path="/approvals" element={<Approvals/>}/>
+          <Route path="/uploadimages" element={<ImageUploadSection/>}/>
           <Route path="*" element={<Navigate to="/vehicles" />} />
         </Route>
       )}

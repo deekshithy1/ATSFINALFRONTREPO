@@ -89,6 +89,7 @@ const handleClick = async (e) => {
               />
                 )
               }
+              <div className="flex ">
             
               {
                 buttonLabel && <button onClick={
@@ -97,8 +98,13 @@ const handleClick = async (e) => {
                   {buttonLabel}
                 </button>
               }
+              
+            </div>
             </div>
           ))}
+
+             
+
 
           <button
             type="submit"
