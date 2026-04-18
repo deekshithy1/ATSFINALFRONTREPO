@@ -280,7 +280,7 @@ const Approvals = () => {
           <h2 className="text-2xl font-bold text-gray-900">Pending Approvals</h2>
 
           <div className="flex flex-col md:flex-row gap-4 w-full md:w-1/2">
-            <div className="flex items-center border gap-x-2 rounded-2xl px-3 py-1 flex-1">
+            <div className="flex items-center border  border-gray-300 gap-x-2 rounded-2xl px-3 py-1 flex-1">
               <Search className="h-5 w-5 text-gray-400" />
               <input
                 type="text"
@@ -292,7 +292,7 @@ const Approvals = () => {
             </div>
 
             <select
-              className="border rounded-2xl px-3 py-1 flex-1 text-center"
+              className="border rounded-2xl border-gray-300 px-3 py-1 flex-1 text-center"
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
             >
@@ -303,7 +303,7 @@ const Approvals = () => {
             </select>
 
             <select
-              className="border rounded-2xl px-3 py-1 flex-1 text-center"
+              className="border rounded-2xl  border-gray-300 px-3 py-1 flex-1 text-center"
               value={selectedTechnician}
               onChange={(e) => setSelectedTechnician(e.target.value)}
             >
@@ -315,7 +315,16 @@ const Approvals = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-left text-gray-700">
+           {
+  vehicles.length===0 ?
+  (
+    <div className=' rounded-4xl p-4 flex '>
+ 
+      <h4 className='text-center'>     No vehilces are pending for Approvals</h4>
+    </div>
+  )
+:
+   (    <table className="min-w-full text-sm text-left text-gray-700">
             <thead className="bg-gray-100 text-xs uppercase text-gray-500">
               <tr>
                 <th className="px-5 py-3">Vehicle ID</th>
@@ -329,6 +338,7 @@ const Approvals = () => {
             </thead>
 
             <tbody className="divide-y divide-gray-200">
+                   
               {vehicles && vehicles.map((v) => (
                 <tr key={v.bookingId} className="hover:bg-gray-50">
                   <td className="px-5 py-4 font-medium">{v.bookingId}</td>
@@ -368,8 +378,11 @@ const Approvals = () => {
               ))}
             </tbody>
           </table>
+   )
+   }
         </div>
       </div>
+
 
       {selectedVehicle && (
         <>
@@ -412,6 +425,8 @@ const Approvals = () => {
           )}
         </>
       )}
+
+
     </div>
   );
 };

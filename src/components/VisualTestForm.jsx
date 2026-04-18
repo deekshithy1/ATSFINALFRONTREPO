@@ -60,6 +60,10 @@ const VisualTestForm = ({
 })  => {
   const hasRules = Object.keys(visualRules).length > 0;
   
+
+  const isRulesSubmmitted=()=>{
+    
+  }
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
       <div className="flex justify-between items-center mb-6">

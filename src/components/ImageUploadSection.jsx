@@ -382,7 +382,7 @@ const ImageUploadSection = () => {
   const [showForm, setShowForm] = useState(true);
 
   const [location, setLocation] = useState(null);
-
+  const [loading,setloading]=useState(false)
   const [vehicleData, setVehicleData] = useState({
     regnNo: "",
     engineNo: "",
@@ -428,6 +428,7 @@ const ImageUploadSection = () => {
 
     try {
 
+      setloading(true)
       const res = await axiosInstance.get(`/vehicles/regn/${vehicleData.regnNo}`);
 
       if (!res.data) {
@@ -440,11 +441,12 @@ const ImageUploadSection = () => {
         engineNo: res.data.engineNo || "",
         chassisNo: res.data.chassisNo || ""
       }));
+      setloading(false)
 
     } catch (error) {
 
       alert("Vehicle details not found ❌");
-
+setloading(false)
       setVehicleData((prev) => ({
         ...prev,
         engineNo: "",
@@ -453,11 +455,21 @@ const ImageUploadSection = () => {
 
     }
   };
+const handleConfirmVehicle = (e) => {
+  e.preventDefault();
 
-  const handleConfirmVehicle = (e) => {
-    e.preventDefault();
-    setShowForm(false);
-  };
+  if (!vehicleData.regnNo) {
+    alert("Please enter Registration Number");
+    return;
+  }
+
+  if (!vehicleData.engineNo || !vehicleData.chassisNo) {
+    alert("Vehicle details not found. Please fetch valid vehicle details ❌");
+    return;
+  }
+
+  setShowForm(false);
+};
 
   /* OPEN CAMERA */
 
@@ -638,7 +650,7 @@ const ImageUploadSection = () => {
                   value={vehicleData[d.name]}
                   onChange={handleChange}
                   readOnly={d.name !== "regnNo"}
-                  className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
                 />
 
                 {d.buttonLabel && (
@@ -655,6 +667,16 @@ const ImageUploadSection = () => {
               </div>
 
             ))}
+            {
+              loading && (
+                 <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mr-3"></div>
+            <span className="text-blue-700">Loading vehicle details...</span>
+          </div>
+        </div>
+              )
+            }
 
             <div className="flex justify-center pt-4">
 

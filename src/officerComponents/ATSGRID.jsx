@@ -39,14 +39,14 @@ const ATSGRID = () => {
   };
 
   return (
-    <div className='flex justify-evenly flex-wrap p-4'>
+    <div className='grid grid-cols-3 justify-evenly flex-wrap p-4  '>
 
       {view === 'list' && ats.map(a => (
-        <div className='bg-white  shadow-md p-4 m-2 rounded w-80' key={a._id}>
+        <div className='bg-white   shadow-md p-4 m-2  flex flex-col   rounded-2xl py-9 items-center' key={a._id}>
           <h2 className='text-lg font-semibold'>{a.name}</h2>
           <h3 className='text-gray-600'>{a.code}</h3>
           <button
-            className='mt-2 bg-blue-600 text-white px-4 py-1 rounded'
+            className='mt-2 bg-blue-600 text-white px-4  rounded-2xl py-2  w-3/4 mt-5'
             onClick={() => handleFetchUsers(a._id,a.name,a.code)}
           >
             Monitor
@@ -54,13 +54,13 @@ const ATSGRID = () => {
         </div>
       ))}
 
-      {view === 'details' && (
-        <div className="w-full">
+      {/* {view === 'details' && (
+        <div className="w-full ">
           <div className='flex justify-between items-center'>
           <button className='mb-4 bg-gray-300 px-3 py-1 rounded' onClick={handleBack}>
             Back to ATS List
           </button>
-    {users.length===0&& <button className='bg-blue-600 text-white p-2 rounded-2xl' onClick={()=>setOpen("open")}> ADD Admin</button>} 
+    {users.length===0&& <button className='bg-blue-600 text-white p-2 rounded-2xl w-1/2' onClick={()=>setOpen("open")}> ADD Admin</button>} 
      </div>   <div className='flex flex-col'>
             <h2 className='font-bold'>{selectedCenter.name}</h2>
             {users&&users.map(user => (
@@ -99,7 +99,79 @@ const ATSGRID = () => {
             ))}
           </div>
         </div>
+      )} */}
+      {view === 'details' && (
+  <div className="w-full px-4">
+
+    {/* Top Controls */}
+    <div className='flex justify-between items-center mb-6'>
+      <button
+        className='bg-gray-300 px-3 py-1 rounded'
+        onClick={handleBack}
+      >
+        Back to ATS List
+      </button>
+
+      {users.length === 0 && (
+        <button
+          className='bg-blue-600 text-white p-2 rounded-2xl px-6'
+          onClick={() => setOpen("open")}
+        >
+          ADD Admin
+        </button>
       )}
+    </div>
+
+    {/* ATS Center Name */}
+    <h2 className='font-bold text-lg mb-4'>{selectedCenter.name}</h2>
+
+    {/* Users List */}
+    <div className='flex flex-col gap-3 max-w-3xl'>
+
+      {users && users.map(user => (
+        <div
+          key={user._id || user.email}
+          className='bg-white p-4 flex justify-between items-center rounded shadow-sm'
+        >
+
+          {/* User Info */}
+          <div className='flex items-center gap-4'>
+            <h2 className='font-bold'>{user.email}</h2>
+
+            <div
+              className={`text-sm px-2 py-1 rounded ${
+                user.role === 'TECHNICIAN'
+                  ? 'text-blue-600 bg-blue-100'
+                  : 'text-green-600 bg-green-100'
+              }`}
+            >
+              {user.role}
+            </div>
+          </div>
+
+          {/* Action Button */}
+          {user.isBlocked ? (
+            <button
+              className='bg-green-600 text-white px-4 py-1 rounded'
+              onClick={() => handleUnblock(user.email, selectedCenter.id)}
+            >
+              Unblock
+            </button>
+          ) : (
+            <button
+              className='bg-red-600 text-white px-4 py-1 rounded'
+              onClick={() => handleBlock(user.email, selectedCenter.id)}
+            >
+              Suspend
+            </button>
+          )}
+
+        </div>
+      ))}
+
+    </div>
+  </div>
+)}
 <AddUser isOpen={isOpen} onClose={()=>setOpen("closed")} atsCenterCode={selectedCenter.code}/>
     </div>
   );

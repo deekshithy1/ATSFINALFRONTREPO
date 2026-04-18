@@ -347,7 +347,7 @@ const Vehicles = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
-
+  const [loading,setLoading]=useState(false)
   const fetchVehiclesByDate = async (date) => {
     try {
       const formattedDate = dayjs(date).format("DDMMYYYY");
@@ -424,7 +424,7 @@ const Vehicles = () => {
     }
   };
 
-  const handleVisualTest = (bookingId) => navigate(`/visualtest?bookingId=${bookingId}`);
+  const handleVisualTest = (regnNo) => navigate(`/visualtest?bookingId=${regnNo}`);
   const handleFunctionalTest = (bookingId) => navigate(`/functionaltest?bookingId=${bookingId}`);
   const handleStartTest = (bookingId) => navigate(`/tests?bookingId=${bookingId}`);
   const handleApproval = (bookingId) => navigate(`/approvals?bookingId=${bookingId}`);
@@ -572,7 +572,7 @@ const Vehicles = () => {
                             {user?.role === "MVI" && (
                               <button
                                 onClick={() =>
-                                  handleVisualTest(vehicle.bookingId)
+                                  handleVisualTest(vehicle.regnNo)
                                 }
                                 className="bg-blue-500 text-white text-xs px-2 py-1 rounded"
                               >

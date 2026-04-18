@@ -11,7 +11,7 @@ const UsersOff = () => {
 
   return (
     <div className="p-4">
-      <div className="text-xl font-semibold mb-4">ATS Users</div>
+      <div className="text-xl font-semibold mb-4">Browse Users by ATS Center</div>
       <ATSGRID  />
 
     </div>
